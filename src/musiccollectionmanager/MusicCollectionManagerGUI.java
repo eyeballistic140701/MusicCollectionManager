@@ -29,6 +29,22 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
         titlePanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        songTitle = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        likedSongsList = new javax.swing.JList<>();
+        addLikedBtn = new javax.swing.JButton();
+        genreSelectorList = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        genreTableList = new javax.swing.JTable();
+        searchBtn = new javax.swing.JButton();
+        titleGenrePlaylist1 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        addGenreBtn = new javax.swing.JButton();
+        titleGenrePlaylist = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        titleLikedSongs = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        deleteSongBtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -78,12 +94,209 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
         getContentPane().add(titlePanel);
         titlePanel.setBounds(290, 20, 380, 80);
 
+        songTitle.setBackground(new java.awt.Color(255, 255, 255));
+        songTitle.setForeground(new java.awt.Color(102, 102, 102));
+        songTitle.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        songTitle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                songTitleActionPerformed(evt);
+            }
+        });
+        getContentPane().add(songTitle);
+        songTitle.setBounds(190, 150, 260, 39);
+
+        likedSongsList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(likedSongsList);
+
+        getContentPane().add(jScrollPane2);
+        jScrollPane2.setBounds(70, 400, 330, 90);
+
+        addLikedBtn.setText("Add to Liked");
+        addLikedBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addLikedBtnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(addLikedBtn);
+        addLikedBtn.setBounds(590, 160, 120, 27);
+
+        genreSelectorList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        genreSelectorList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                genreSelectorListActionPerformed(evt);
+            }
+        });
+        getContentPane().add(genreSelectorList);
+        genreSelectorList.setBounds(190, 210, 90, 30);
+
+        genreTableList.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"", null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Jazz", "Synth"
+            }
+        ));
+        genreTableList.setColumnSelectionAllowed(true);
+        genreTableList.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(genreTableList);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(490, 400, 450, 140);
+
+        searchBtn.setText("Search");
+        searchBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBtnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(searchBtn);
+        searchBtn.setBounds(470, 160, 101, 27);
+
+        titleGenrePlaylist1.setBackground(new java.awt.Color(255, 255, 255));
+        titleGenrePlaylist1.setMinimumSize(new java.awt.Dimension(400, 70));
+
+        jLabel7.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel7.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("Song Title:");
+        jLabel7.setToolTipText("");
+        jLabel7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout titleGenrePlaylist1Layout = new javax.swing.GroupLayout(titleGenrePlaylist1);
+        titleGenrePlaylist1.setLayout(titleGenrePlaylist1Layout);
+        titleGenrePlaylist1Layout.setHorizontalGroup(
+            titleGenrePlaylist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(titleGenrePlaylist1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(272, Short.MAX_VALUE))
+        );
+        titleGenrePlaylist1Layout.setVerticalGroup(
+            titleGenrePlaylist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(titleGenrePlaylist1Layout.createSequentialGroup()
+                .addComponent(jLabel7)
+                .addGap(0, 44, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(titleGenrePlaylist1);
+        titleGenrePlaylist1.setBounds(40, 150, 140, 30);
+
+        addGenreBtn.setText("Add to Genre Playlist");
+        addGenreBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addGenreBtnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(addGenreBtn);
+        addGenreBtn.setBounds(290, 210, 160, 27);
+
+        titleGenrePlaylist.setBackground(new java.awt.Color(255, 255, 255));
+        titleGenrePlaylist.setMinimumSize(new java.awt.Dimension(400, 70));
+
+        jLabel6.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel6.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Genre Playlists");
+        jLabel6.setToolTipText("");
+        jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout titleGenrePlaylistLayout = new javax.swing.GroupLayout(titleGenrePlaylist);
+        titleGenrePlaylist.setLayout(titleGenrePlaylistLayout);
+        titleGenrePlaylistLayout.setHorizontalGroup(
+            titleGenrePlaylistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(titleGenrePlaylistLayout.createSequentialGroup()
+                .addGap(133, 133, 133)
+                .addComponent(jLabel6)
+                .addContainerGap(132, Short.MAX_VALUE))
+        );
+        titleGenrePlaylistLayout.setVerticalGroup(
+            titleGenrePlaylistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(titleGenrePlaylistLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(titleGenrePlaylist);
+        titleGenrePlaylist.setBounds(490, 360, 450, 40);
+
+        titleLikedSongs.setBackground(new java.awt.Color(255, 255, 255));
+        titleLikedSongs.setMinimumSize(new java.awt.Dimension(400, 70));
+
+        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel5.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setText("Liked Songs");
+        jLabel5.setToolTipText("");
+        jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout titleLikedSongsLayout = new javax.swing.GroupLayout(titleLikedSongs);
+        titleLikedSongs.setLayout(titleLikedSongsLayout);
+        titleLikedSongsLayout.setHorizontalGroup(
+            titleLikedSongsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(titleLikedSongsLayout.createSequentialGroup()
+                .addGap(85, 85, 85)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(158, Short.MAX_VALUE))
+        );
+        titleLikedSongsLayout.setVerticalGroup(
+            titleLikedSongsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(titleLikedSongsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(titleLikedSongs);
+        titleLikedSongs.setBounds(70, 360, 330, 40);
+
+        deleteSongBtn.setText("Delete Song");
+        deleteSongBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteSongBtnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(deleteSongBtn);
+        deleteSongBtn.setBounds(730, 160, 110, 27);
+
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/musiccollectionmanager/images/pexels-backdated-10643825 (1).jpg"))); // NOI18N
         getContentPane().add(jLabel4);
         jLabel4.setBounds(0, 0, 976, 650);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void songTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_songTitleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_songTitleActionPerformed
+
+    private void addLikedBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLikedBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addLikedBtnActionPerformed
+
+    private void genreSelectorListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genreSelectorListActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_genreSelectorListActionPerformed
+
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchBtnActionPerformed
+
+    private void addGenreBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGenreBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addGenreBtnActionPerformed
+
+    private void deleteSongBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSongBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_deleteSongBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -121,9 +334,25 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    javax.swing.JButton addGenreBtn;
+    javax.swing.JButton addLikedBtn;
+    javax.swing.JButton deleteSongBtn;
+    javax.swing.JComboBox<String> genreSelectorList;
+    javax.swing.JTable genreTableList;
     javax.swing.JLabel jLabel1;
     javax.swing.JLabel jLabel2;
     javax.swing.JLabel jLabel4;
+    javax.swing.JLabel jLabel5;
+    javax.swing.JLabel jLabel6;
+    javax.swing.JLabel jLabel7;
+    javax.swing.JScrollPane jScrollPane1;
+    javax.swing.JScrollPane jScrollPane2;
+    javax.swing.JList<String> likedSongsList;
+    javax.swing.JButton searchBtn;
+    javax.swing.JTextField songTitle;
+    javax.swing.JPanel titleGenrePlaylist;
+    javax.swing.JPanel titleGenrePlaylist1;
+    javax.swing.JPanel titleLikedSongs;
     javax.swing.JPanel titlePanel;
     // End of variables declaration//GEN-END:variables
 }
