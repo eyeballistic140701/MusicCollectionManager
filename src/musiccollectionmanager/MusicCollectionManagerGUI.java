@@ -4,17 +4,23 @@
  */
 package musiccollectionmanager;
 
+import javax.swing.JOptionPane;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+
 /**
  *
  * @author chris
  */
 public class MusicCollectionManagerGUI extends javax.swing.JFrame {
-
-    /**
-     * Creates new form MusicCollectionManagerGUI
-     */
-    public MusicCollectionManagerGUI() {
-        initComponents();
+    private MusicCollectionManagerApp app;
+    private DefaultListModel<String> likedSongsModel; // Declare the model at the class level
+    
+    public MusicCollectionManagerGUI(MusicCollectionManagerApp app) {
+        this.app = app;
+        initComponents(); // Initialize GUI components first
+        likedSongsModel = new DefaultListModel<>(); // Create the model for liked songs
+        likedSongsList.setModel(likedSongsModel); // Set the model to the JList
     }
 
     /**
@@ -35,9 +41,10 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         likedSongsList = new javax.swing.JList<>();
         titleGenrePlaylist = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         genreTableList = new javax.swing.JTable();
+        likedSongsCounter1 = new javax.swing.JLabel();
+        likedSongsCounter2 = new javax.swing.JLabel();
         songTitle = new javax.swing.JTextField();
         addLikedBtn = new javax.swing.JButton();
         genreSelectorList = new javax.swing.JComboBox<>();
@@ -53,7 +60,6 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBounds(new java.awt.Rectangle(0, 0, 976, 650));
         setMaximizedBounds(new java.awt.Rectangle(0, 0, 976, 650));
-        setMaximumSize(new java.awt.Dimension(976, 650));
         setMinimumSize(new java.awt.Dimension(976, 650));
         setResizable(false);
         setSize(new java.awt.Dimension(976, 650));
@@ -88,11 +94,10 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
         titlePanelLayout.setVerticalGroup(
             titlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titlePanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         getContentPane().add(titlePanel);
@@ -108,7 +113,7 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
         jLabel5.setBackground(new java.awt.Color(255, 255, 255));
         jLabel5.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Liked Songs");
+        jLabel5.setText("Liked Songs: 2");
         jLabel5.setToolTipText("");
         jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
@@ -124,13 +129,10 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
         titleLikedSongsLayout.setHorizontalGroup(
             titleLikedSongsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titleLikedSongsLayout.createSequentialGroup()
+                .addGap(42, 42, 42)
                 .addGroup(titleLikedSongsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(titleLikedSongsLayout.createSequentialGroup()
-                        .addGap(42, 42, 42)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(titleLikedSongsLayout.createSequentialGroup()
-                        .addGap(156, 156, 156)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(55, Short.MAX_VALUE))
         );
         titleLikedSongsLayout.setVerticalGroup(
@@ -148,13 +150,6 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
         titleGenrePlaylist.setBackground(new java.awt.Color(51, 51, 51));
         titleGenrePlaylist.setMinimumSize(new java.awt.Dimension(400, 70));
 
-        jLabel6.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel6.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Genre Playlists");
-        jLabel6.setToolTipText("");
-        jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
         genreTableList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"", null},
@@ -170,27 +165,45 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
         genreTableList.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(genreTableList);
 
+        likedSongsCounter1.setBackground(new java.awt.Color(255, 255, 255));
+        likedSongsCounter1.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        likedSongsCounter1.setForeground(new java.awt.Color(255, 255, 255));
+        likedSongsCounter1.setText("Synth: 2");
+        likedSongsCounter1.setToolTipText("");
+        likedSongsCounter1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        likedSongsCounter2.setBackground(new java.awt.Color(255, 255, 255));
+        likedSongsCounter2.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        likedSongsCounter2.setForeground(new java.awt.Color(255, 255, 255));
+        likedSongsCounter2.setText("Jazz: 2");
+        likedSongsCounter2.setToolTipText("");
+        likedSongsCounter2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout titleGenrePlaylistLayout = new javax.swing.GroupLayout(titleGenrePlaylist);
         titleGenrePlaylist.setLayout(titleGenrePlaylistLayout);
         titleGenrePlaylistLayout.setHorizontalGroup(
             titleGenrePlaylistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(titleGenrePlaylistLayout.createSequentialGroup()
+                .addGap(84, 84, 84)
+                .addComponent(likedSongsCounter2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(likedSongsCounter1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(105, 105, 105))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, titleGenrePlaylistLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
-            .addGroup(titleGenrePlaylistLayout.createSequentialGroup()
-                .addGap(143, 143, 143)
-                .addComponent(jLabel6)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         titleGenrePlaylistLayout.setVerticalGroup(
             titleGenrePlaylistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titleGenrePlaylistLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(titleGenrePlaylistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(likedSongsCounter2)
+                    .addComponent(likedSongsCounter1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Genre PlayLists", titleGenrePlaylist);
@@ -199,20 +212,21 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
         jTabbedPane1.setBounds(260, 280, 480, 230);
 
         songTitle.setBackground(new java.awt.Color(255, 255, 255));
-        songTitle.setForeground(new java.awt.Color(102, 102, 102));
-        songTitle.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        songTitle.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        songTitle.setForeground(new java.awt.Color(0, 0, 0));
+        songTitle.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
         songTitle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 songTitleActionPerformed(evt);
             }
         });
         getContentPane().add(songTitle);
-        songTitle.setBounds(420, 130, 310, 30);
+        songTitle.setBounds(380, 130, 350, 30);
 
         addLikedBtn.setBackground(new java.awt.Color(69, 155, 81));
         addLikedBtn.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
         addLikedBtn.setForeground(new java.awt.Color(255, 255, 255));
-        addLikedBtn.setText("✅ Add to Liked");
+        addLikedBtn.setText("  ✔️ Add to Liked");
         addLikedBtn.setBorder(null);
         addLikedBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -220,7 +234,7 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
             }
         });
         getContentPane().add(addLikedBtn);
-        addLikedBtn.setBounds(440, 170, 130, 30);
+        addLikedBtn.setBounds(430, 170, 140, 30);
 
         genreSelectorList.setBackground(new java.awt.Color(30, 137, 255));
         genreSelectorList.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -248,10 +262,11 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
         searchBtn.setBounds(270, 170, 130, 30);
 
         titleGenrePlaylist1.setBackground(new java.awt.Color(51, 51, 51));
+        titleGenrePlaylist1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 3, true));
         titleGenrePlaylist1.setMinimumSize(new java.awt.Dimension(400, 70));
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel7.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Song Title:");
         jLabel7.setToolTipText("");
@@ -262,19 +277,19 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
         titleGenrePlaylist1Layout.setHorizontalGroup(
             titleGenrePlaylist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titleGenrePlaylist1Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jLabel7)
-                .addContainerGap(278, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(287, Short.MAX_VALUE))
         );
         titleGenrePlaylist1Layout.setVerticalGroup(
             titleGenrePlaylist1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titleGenrePlaylist1Layout.createSequentialGroup()
                 .addComponent(jLabel7)
-                .addGap(0, 44, Short.MAX_VALUE))
+                .addGap(0, 39, Short.MAX_VALUE))
         );
 
         getContentPane().add(titleGenrePlaylist1);
-        titleGenrePlaylist1.setBounds(270, 130, 140, 30);
+        titleGenrePlaylist1.setBounds(270, 130, 110, 30);
 
         addGenreBtn.setBackground(new java.awt.Color(17, 131, 255));
         addGenreBtn.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
@@ -316,7 +331,7 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
         jButton4.setBackground(new java.awt.Color(74, 158, 85));
         jButton4.setFont(new java.awt.Font("Segoe UI Emoji", 1, 18)); // NOI18N
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setText("▶  ️PLAY");
+        jButton4.setText("⏯ PLAY / PAUSE");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -336,17 +351,50 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
     private void songTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_songTitleActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_songTitleActionPerformed
-
+    
     private void addLikedBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLikedBtnActionPerformed
-        // TODO add your handling code here:
+        String songTitleText = songTitle.getText().trim(); // Use the correct JTextField variable name here
+        if (songTitleText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please enter a song title.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (!likedSongsModel.contains(songTitleText)) {
+            likedSongsModel.addElement(songTitleText); // Add the song title to the model
+            songTitle.setText(""); // Clear the text field after adding the song
+        } else {
+            JOptionPane.showMessageDialog(null, "This song is already in your Liked Songs list.", "Duplicate Entry", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_addLikedBtnActionPerformed
 
+    private void updateLikedSongsList() {
+        likedSongsList.setModel(likedSongsModel); // Refresh the JList with the updated model
+    }
+    
     private void genreSelectorListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genreSelectorListActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_genreSelectorListActionPerformed
 
     private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
-        // TODO add your handling code here:
+        // Get the song title from the text field
+        String searchQuery = songTitle.getText().trim();
+
+        // Check if the song title is not empty
+        if (!searchQuery.isEmpty()) {
+            // Search for the song in the likedSongsModel
+            int index = likedSongsModel.indexOf(searchQuery);
+
+            // If found, select the song in the JList and ensure it is visible to the user
+            if (index != -1) {
+                likedSongsList.setSelectedIndex(index);
+                likedSongsList.ensureIndexIsVisible(index);
+                JOptionPane.showMessageDialog(this, "Song found: " + searchQuery, "Song Found", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Song not found in Liked Songs.", "Not Found", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please enter a song title to search.", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_searchBtnActionPerformed
 
     private void addGenreBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGenreBtnActionPerformed
@@ -354,7 +402,33 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_addGenreBtnActionPerformed
 
     private void deleteSongBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSongBtnActionPerformed
-        // TODO add your handling code here:
+        // Get the song title from the text field
+        String songTitleToDelete = songTitle.getText().trim();
+
+        // First, try to delete by selection in the JList
+        int selectedIndex = likedSongsList.getSelectedIndex();
+        if (selectedIndex != -1) {
+            // Delete by selected index if there is a selection
+            String selectedSong = likedSongsModel.getElementAt(selectedIndex);
+            likedSongsModel.remove(selectedIndex);
+            app.removeSongFromLiked(selectedSong);
+            JOptionPane.showMessageDialog(this, "Song removed from Liked Songs.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } else if (!songTitleToDelete.isEmpty()) {
+            // If nothing is selected, but a title is entered, try to delete by song title
+            if (likedSongsModel.contains(songTitleToDelete)) {
+                likedSongsModel.removeElement(songTitleToDelete);
+                app.removeSongFromLiked(songTitleToDelete);
+                JOptionPane.showMessageDialog(this, "Song removed from Liked Songs.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Song not found in Liked Songs.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            // If there's no selection and no text input, show a warning message
+            JOptionPane.showMessageDialog(this, "Please select a song or enter a title to delete.", "No Selection", JOptionPane.WARNING_MESSAGE);
+        }
+
+        // Clear the text field after delete action
+        songTitle.setText("");
     }//GEN-LAST:event_deleteSongBtnActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -369,11 +443,14 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                MusicCollectionManagerApp app = new MusicCollectionManagerApp();
+                MusicCollectionManagerGUI myGUI = new MusicCollectionManagerGUI(app);
+                myGUI.setVisible(true);
+            }
+        });
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -391,13 +468,6 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MusicCollectionManagerGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MusicCollectionManagerGUI().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -412,11 +482,12 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame {
     javax.swing.JLabel jLabel2;
     javax.swing.JLabel jLabel3;
     javax.swing.JLabel jLabel5;
-    javax.swing.JLabel jLabel6;
     javax.swing.JLabel jLabel7;
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JScrollPane jScrollPane2;
     javax.swing.JTabbedPane jTabbedPane1;
+    javax.swing.JLabel likedSongsCounter1;
+    javax.swing.JLabel likedSongsCounter2;
     javax.swing.JList<String> likedSongsList;
     javax.swing.JButton searchBtn;
     javax.swing.JTextField songTitle;
