@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 package musiccollectionmanager;
-import java.util.List;
 /**
  *
  * @author chris
@@ -11,8 +10,10 @@ import java.util.List;
 
 
 public interface Manageable {
-    void addSong(Song song);
-    boolean removeSong(Song song);
-    List<Song> getSongs();
+    boolean addSongToLiked(String songTitle);
+    void removeSongFromLiked(String songTitle);
+    boolean addSongToGenre(String songTitle, String genre);
+    void removeSongFromGenres(String songTitle);
+    int searchSongInLiked(String songTitle);
 }
 

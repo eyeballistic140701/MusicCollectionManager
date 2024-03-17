@@ -28,22 +28,18 @@ import javax.swing.JOptionPane;
 
 public class MusicCollectionManagerApp {
     
-    // LinkedLists for managing song titles
-    private LinkedList<String> likedSongs = new LinkedList<>();
-    private LinkedList<String> jazzSongs = new LinkedList<>();
-    private LinkedList<String> synthSongs = new LinkedList<>();
+    private final LinkedList<String> likedSongs = new LinkedList<>();
+    private final LinkedList<String> jazzSongs = new LinkedList<>();
+    private final LinkedList<String> synthSongs = new LinkedList<>();
     
     // Constructor
     public MusicCollectionManagerApp() {
-        // Possibly initialize your lists with data or any other setup needed
     }
     
     public int searchSongInLiked(String songTitle) {
         return likedSongs.indexOf(songTitle);
     }
 
-    
-    // Method to add a song to the liked songs list
     public boolean addSongToLiked(String songTitle) {
         if (songTitle == null || songTitle.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter a song title.", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -57,32 +53,42 @@ public class MusicCollectionManagerApp {
         return true;
     }
     
-    // Additional methods to interact with the jazz and synth songs lists
-    
-    // Method to copy a song to a genre-specific list
-    public void copySongToGenre(String songTitle, String genre) {
-        // This method assumes that the song already exists in the liked songs list
-        if(genre.equalsIgnoreCase("jazz") && !jazzSongs.contains(songTitle)) {
-            jazzSongs.add(songTitle);
-        } else if(genre.equalsIgnoreCase("synth") && !synthSongs.contains(songTitle)) {
-            synthSongs.add(songTitle);
+    public boolean copySongToGenre(String songTitle, String genre) {
+        if (genre.equalsIgnoreCase("jazz")) {
+            if (!jazzSongs.contains(songTitle)) {
+                jazzSongs.add(songTitle);
+                synthSongs.remove(songTitle); // Ensure it's not listed under another genre
+                return true;
+            }
+        } else if (genre.equalsIgnoreCase("synth")) {
+            if (!synthSongs.contains(songTitle)) {
+                synthSongs.add(songTitle);
+                jazzSongs.remove(songTitle); // Ensure it's not listed under another genre
+                return true;
+            }
         } else {
-            // If the genre is not recognized or the song is already in the genre list
-            JOptionPane.showMessageDialog(null, "Genre not recognized or song already in genre list.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Genre not recognized: " + genre, "Error", JOptionPane.ERROR_MESSAGE);
         }
+        return false;
     }
     
     // Method to remove a song from the liked songs list
     public void removeSongFromLiked(String songTitle) {
-        if (likedSongs.contains(songTitle)) {
-            likedSongs.remove(songTitle);
-            JOptionPane.showMessageDialog(null, "Song removed from Liked Songs.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        if (likedSongs.remove(songTitle)) {
+            // Also attempt to remove from any genre-specific list
+            jazzSongs.remove(songTitle);
+            synthSongs.remove(songTitle);
+            JOptionPane.showMessageDialog(null, "Song removed from Liked Songs and genre lists.", "Success", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null, "Song not found in Liked Songs.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
-    // Getters to access the song lists from the GUI
+    public void removeSongFromGenres(String songTitle) {
+        jazzSongs.remove(songTitle);
+        synthSongs.remove(songTitle);
+    }
+    
     public LinkedList<String> getLikedSongs() {
         return likedSongs;
     }
@@ -95,11 +101,6 @@ public class MusicCollectionManagerApp {
         return synthSongs;
     }
     
-    
-
-    
-    
-    // Main method to launch the application
     public static void main(String[] args) {
         MusicCollectionManagerGUI myGUI = new MusicCollectionManagerGUI(new MusicCollectionManagerApp());
         myGUI.setVisible(true);
