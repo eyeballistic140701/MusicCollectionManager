@@ -1,28 +1,32 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package musiccollectionmanager;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.DefaultListModel;
-import javax.swing.JList;
+import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author chris
  */
-public class MusicCollectionManagerGUI extends javax.swing.JFrame{
-    private MusicCollectionManagerApp app;
-    private DefaultListModel<String> likedSongsModel; // Declare the model at the class level
+public final class MusicCollectionManagerGUI extends javax.swing.JFrame{
+    private final MusicCollectionManagerApp app;
+    private final DefaultListModel<String> likedSongsModel; // Declare the model at the class level
+
     
     public MusicCollectionManagerGUI(MusicCollectionManagerApp app) {
         this.app = app;
         initComponents(); // Initialize GUI components first
+
         likedSongsModel = new DefaultListModel<>(); // Create the model for liked songs
         likedSongsList.setModel(likedSongsModel); // Set the model to the JList
+
+        updateCounters(); // Update counters based on the current state
     }
+
     
    /**
      * This method is called from within the constructor to initialize the form.
@@ -38,14 +42,14 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
         jLabel1 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         titleLikedSongs = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
+        likedSongsCounter = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         likedSongsList = new javax.swing.JList<>();
         titleGenrePlaylist = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         genreTableList = new javax.swing.JTable();
-        likedSongsCounter1 = new javax.swing.JLabel();
-        likedSongsCounter2 = new javax.swing.JLabel();
+        synthCounter = new javax.swing.JLabel();
+        jazzCounter = new javax.swing.JLabel();
         songTitle = new javax.swing.JTextField();
         addLikedBtn = new javax.swing.JButton();
         genreSelectorList = new javax.swing.JComboBox<>();
@@ -55,7 +59,7 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
         addGenreBtn = new javax.swing.JButton();
         deleteSongBtn = new javax.swing.JButton();
         repeatBtn = new javax.swing.JButton();
-        playPauseBtn = new javax.swing.JButton();
+        playBtn = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -111,12 +115,11 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
         titleLikedSongs.setBackground(new java.awt.Color(51, 51, 51));
         titleLikedSongs.setMinimumSize(new java.awt.Dimension(400, 70));
 
-        jLabel5.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel5.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Liked Songs: 2");
-        jLabel5.setToolTipText("");
-        jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        likedSongsCounter.setBackground(new java.awt.Color(255, 255, 255));
+        likedSongsCounter.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
+        likedSongsCounter.setForeground(new java.awt.Color(255, 255, 255));
+        likedSongsCounter.setToolTipText("");
+        likedSongsCounter.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         likedSongsList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -133,14 +136,14 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
                 .addGap(42, 42, 42)
                 .addGroup(titleLikedSongsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(likedSongsCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(55, Short.MAX_VALUE))
         );
         titleLikedSongsLayout.setVerticalGroup(
             titleLikedSongsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titleLikedSongsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(likedSongsCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(17, Short.MAX_VALUE))
@@ -164,30 +167,28 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
         jScrollPane1.setViewportView(genreTableList);
         genreTableList.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-        likedSongsCounter1.setBackground(new java.awt.Color(255, 255, 255));
-        likedSongsCounter1.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
-        likedSongsCounter1.setForeground(new java.awt.Color(255, 255, 255));
-        likedSongsCounter1.setText("Synth: 2");
-        likedSongsCounter1.setToolTipText("");
-        likedSongsCounter1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        synthCounter.setBackground(new java.awt.Color(255, 255, 255));
+        synthCounter.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        synthCounter.setForeground(new java.awt.Color(255, 255, 255));
+        synthCounter.setToolTipText("");
+        synthCounter.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        likedSongsCounter2.setBackground(new java.awt.Color(255, 255, 255));
-        likedSongsCounter2.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
-        likedSongsCounter2.setForeground(new java.awt.Color(255, 255, 255));
-        likedSongsCounter2.setText("Jazz: 2");
-        likedSongsCounter2.setToolTipText("");
-        likedSongsCounter2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jazzCounter.setBackground(new java.awt.Color(255, 255, 255));
+        jazzCounter.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        jazzCounter.setForeground(new java.awt.Color(255, 255, 255));
+        jazzCounter.setToolTipText("");
+        jazzCounter.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout titleGenrePlaylistLayout = new javax.swing.GroupLayout(titleGenrePlaylist);
         titleGenrePlaylist.setLayout(titleGenrePlaylistLayout);
         titleGenrePlaylistLayout.setHorizontalGroup(
             titleGenrePlaylistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titleGenrePlaylistLayout.createSequentialGroup()
-                .addGap(84, 84, 84)
-                .addComponent(likedSongsCounter2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addComponent(jazzCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(likedSongsCounter1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(105, 105, 105))
+                .addComponent(synthCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, titleGenrePlaylistLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -197,12 +198,12 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
             titleGenrePlaylistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titleGenrePlaylistLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(titleGenrePlaylistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(likedSongsCounter2)
-                    .addComponent(likedSongsCounter1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(titleGenrePlaylistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(synthCounter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jazzCounter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Genre PlayLists", titleGenrePlaylist);
@@ -327,17 +328,17 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
         getContentPane().add(repeatBtn);
         repeatBtn.setBounds(510, 530, 220, 70);
 
-        playPauseBtn.setBackground(new java.awt.Color(74, 158, 85));
-        playPauseBtn.setFont(new java.awt.Font("Segoe UI Emoji", 1, 18)); // NOI18N
-        playPauseBtn.setForeground(new java.awt.Color(255, 255, 255));
-        playPauseBtn.setText("⏯ PLAY / PAUSE");
-        playPauseBtn.addActionListener(new java.awt.event.ActionListener() {
+        playBtn.setBackground(new java.awt.Color(74, 158, 85));
+        playBtn.setFont(new java.awt.Font("Segoe UI Emoji", 1, 18)); // NOI18N
+        playBtn.setForeground(new java.awt.Color(255, 255, 255));
+        playBtn.setText("⏯ PLAY");
+        playBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                playPauseBtnActionPerformed(evt);
+                playBtnActionPerformed(evt);
             }
         });
-        getContentPane().add(playPauseBtn);
-        playPauseBtn.setBounds(270, 530, 220, 70);
+        getContentPane().add(playBtn);
+        playBtn.setBounds(270, 530, 220, 70);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/musiccollectionmanager/images/pexels-backdated-10643825 (1).jpg"))); // NOI18N
         jLabel3.setText("jLabel3");
@@ -350,7 +351,7 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
     private void songTitleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_songTitleActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_songTitleActionPerformed
-    
+
     private void addLikedBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLikedBtnActionPerformed
         String songTitleText = songTitle.getText().trim(); // Use the correct JTextField variable name here
         if (songTitleText.isEmpty()) {
@@ -365,12 +366,7 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
             JOptionPane.showMessageDialog(null, "This song is already in your Liked Songs list.", "Duplicate Entry", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_addLikedBtnActionPerformed
-
-    private void updateLikedSongsList() {
-        likedSongsList.setModel(likedSongsModel); // Refresh the JList with the updated model
-    }
-
-    
+     
     private void genreSelectorListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genreSelectorListActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_genreSelectorListActionPerformed
@@ -401,7 +397,7 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
         int selectedSongIndex = likedSongsList.getSelectedIndex();
         if (selectedSongIndex == -1) {
             JOptionPane.showMessageDialog(this, "Please select a song to add to a genre playlist.", "No Selection", JOptionPane.WARNING_MESSAGE);
-            return;
+            return; 
         }
 
         String selectedGenre = genreSelectorList.getSelectedItem().toString();
@@ -411,21 +407,37 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
         }
 
         String songTitle = likedSongsModel.getElementAt(selectedSongIndex);
-        app.copySongToGenre(songTitle, selectedGenre);
 
-        updateGenreTableList(selectedGenre, songTitle); // Update the table display
+        // Remove song from any genre (if present) and add to the selected new genre
+        moveSongToGenre(songTitle, selectedGenre);
     }//GEN-LAST:event_addGenreBtnActionPerformed
 
-    private void updateGenreTableList(String genre, String songTitle) {
+    private void moveSongToGenre(String songTitle, String newGenre) {
         DefaultTableModel model = (DefaultTableModel) genreTableList.getModel();
 
-        if (genre.equalsIgnoreCase("Jazz")) {
+        // Find the song in the table and remove it
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if (songTitle.equals(model.getValueAt(i, 0)) || songTitle.equals(model.getValueAt(i, 1))) {
+                if (newGenre.equalsIgnoreCase("Jazz")) {
+                    // Move to Jazz column: set Synth column to "", set Jazz column to songTitle
+                    model.setValueAt("", i, 1);
+                    model.setValueAt(songTitle, i, 0);
+                } else if (newGenre.equalsIgnoreCase("Synth")) {
+                    // Move to Synth column: set Jazz column to "", set Synth column to songTitle
+                    model.setValueAt("", i, 0);
+                    model.setValueAt(songTitle, i, 1);
+                }
+                return; // Stop searching after finding the song
+            }
+        }
+
+        // If the song is not found in the table, add it as a new row
+        if (newGenre.equalsIgnoreCase("Jazz")) {
             model.addRow(new Object[]{songTitle, ""}); // Add to Jazz column
-        } else if (genre.equalsIgnoreCase("Synth")) {
+        } else if (newGenre.equalsIgnoreCase("Synth")) {
             model.addRow(new Object[]{"", songTitle}); // Add to Synth column
         }
     }
-    
     
     private void deleteSongBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSongBtnActionPerformed
         // Get the song title from the text field
@@ -440,6 +452,7 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
             app.removeSongFromLiked(selectedSong);
             removeSongFromGenreTableList(selectedSong); // Update the table
             JOptionPane.showMessageDialog(this, "Song removed from Liked Songs.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            
         } else if (!songTitleToDelete.isEmpty()) {
             // If nothing is selected, but a title is entered, try to delete by song title
             if (likedSongsModel.contains(songTitleToDelete)) {
@@ -447,8 +460,10 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
                 app.removeSongFromLiked(songTitleToDelete);
                 removeSongFromGenreTableList(songTitleToDelete); // Update the table
                 JOptionPane.showMessageDialog(this, "Song removed from Liked Songs.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Song not found in Liked Songs.", "Error", JOptionPane.ERROR_MESSAGE);
+                
             }
         } else {
             // If there's no selection and no text input, show a warning message
@@ -465,25 +480,32 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
             if (model.getValueAt(i, 0).equals(songTitle) || model.getValueAt(i, 1).equals(songTitle)) {
                 model.removeRow(i);
                 // If the song can exist in only one genre at a time, you can break after finding the song
+                
                 break;
             }
         }
     }
     
-    
-    private void playPauseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playPauseBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_playPauseBtnActionPerformed
+    private boolean isRepeatEnabled = false; // To track the repeat status
+    private void playBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playBtnActionPerformed
+        // This method could list the songs in the playlist
+        List<String> playlist = app.getLikedSongs(); // This should be the list you want to "play"
+        for (String song : playlist) {
+            System.out.println(song); // This could be replaced with a GUI element to display songs
+        }
+    }//GEN-LAST:event_playBtnActionPerformed
 
     private void repeatBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repeatBtnActionPerformed
-        // TODO add your handling code here:
+        //Toggle the repeat status
+        isRepeatEnabled = !isRepeatEnabled;
+        repeatBtn.setText(isRepeatEnabled ? "Repeat On" : "Repeat Off"); // Update button text based on repeat status
     }//GEN-LAST:event_repeatBtnActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 MusicCollectionManagerApp app = new MusicCollectionManagerApp();
                 MusicCollectionManagerGUI myGUI = new MusicCollectionManagerGUI(app);
@@ -510,8 +532,24 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
         //</editor-fold>
     }
     
-    
+    public void updateCounters() {
+        likedSongsCounter.setText("Liked Songs: " + app.getLikedSongs().size());
+        jazzCounter.setText("Jazz Songs: " + app.getJazzSongs().size());
+        synthCounter.setText("Synth Songs: " + app.getSynthSongs().size());
+    }
 
+
+
+    public void updateCountersOnEDT() {
+        // Example usage of SwingUtilities.invokeLater to update counters on the EDT
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                updateCounters();
+            }
+        });
+    }
+
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton addGenreBtn;
     javax.swing.JButton addLikedBtn;
@@ -521,21 +559,22 @@ public class MusicCollectionManagerGUI extends javax.swing.JFrame{
     javax.swing.JLabel jLabel1;
     javax.swing.JLabel jLabel2;
     javax.swing.JLabel jLabel3;
-    javax.swing.JLabel jLabel5;
     javax.swing.JLabel jLabel7;
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JScrollPane jScrollPane2;
     javax.swing.JTabbedPane jTabbedPane1;
-    javax.swing.JLabel likedSongsCounter1;
-    javax.swing.JLabel likedSongsCounter2;
+    javax.swing.JLabel jazzCounter;
+    javax.swing.JLabel likedSongsCounter;
     javax.swing.JList<String> likedSongsList;
-    javax.swing.JButton playPauseBtn;
+    javax.swing.JButton playBtn;
     javax.swing.JButton repeatBtn;
     javax.swing.JButton searchBtn;
     javax.swing.JTextField songTitle;
+    javax.swing.JLabel synthCounter;
     javax.swing.JPanel titleGenrePlaylist;
     javax.swing.JPanel titleGenrePlaylist1;
     javax.swing.JPanel titleLikedSongs;
     javax.swing.JPanel titlePanel;
     // End of variables declaration//GEN-END:variables
+
 }

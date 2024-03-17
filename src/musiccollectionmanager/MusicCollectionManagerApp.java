@@ -1,46 +1,77 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+/**
+ *
+ * @author chris
  */
-//package musiccollectionmanager;
-//
-///**
-// *
-// * @author chris
-// */
-//public class MusicCollectionManagerApp {
-//
-//    /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String[] args) {
-//        // TODO code application logic here
-//        MusicCollectionManagerGUI myGUI = new MusicCollectionManagerGUI();
-//        myGUI.setVisible(true);
-//    }
-//    
-//}
-
 package musiccollectionmanager;
 
-import java.util.LinkedList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.swing.table.DefaultTableModel;
 
 public class MusicCollectionManagerApp {
     
-    private final LinkedList<String> likedSongs = new LinkedList<>();
-    private final LinkedList<String> jazzSongs = new LinkedList<>();
-    private final LinkedList<String> synthSongs = new LinkedList<>();
+    private ArrayList<String> likedSongs = new ArrayList<>();
+    private ArrayList<String> jazzSongs = new ArrayList<>();
+    private ArrayList<String> synthSongs = new ArrayList<>();
+    private int currentSongIndex = 0; // Index of the currently playing song
+    private Timer playTimer; // Timer to handle playing songs
+    
+    private MusicCollectionManagerGUI gui;
     
     // Constructor
     public MusicCollectionManagerApp() {
+        likedSongs = new ArrayList<>();
+        jazzSongs = new ArrayList<>();
+        synthSongs = new ArrayList<>();
+
+        // Initialize the playTimer with a 3-second delay and an ActionListener
+        playTimer = new Timer(3000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (currentSongIndex < likedSongs.size()) {
+                    // "Play" the song by showing a dialog
+                    JOptionPane.showMessageDialog(null, "Now playing: " + likedSongs.get(currentSongIndex));
+                    currentSongIndex++; // Move to the next song
+                } else {
+                    // If repeat mode is on, reset to the first song
+                    currentSongIndex = 0;
+                }
+            }
+        });
+    }
+
+    public void startPlaying() {
+        playTimer.start(); // Start the playTimer to play songs
+    }
+
+    public void stopPlaying() {
+        playTimer.stop(); // Stop the playTimer
+    }
+
+    public void toggleRepeatMode() {
+        // If we reach the end of the list and repeat mode is on, start from the beginning
+        if (currentSongIndex >= likedSongs.size()) {
+            currentSongIndex = 0;
+        }
+        // Continue or stop the timer based on repeat mode
+        if (playTimer.isRunning()) {
+            stopPlaying();
+        } else {
+            startPlaying();
+        }
     }
     
     public int searchSongInLiked(String songTitle) {
+        // Search for the song in the liked songs list
         return likedSongs.indexOf(songTitle);
     }
 
     public boolean addSongToLiked(String songTitle) {
+        // Add a song to the liked songs list
         if (songTitle == null || songTitle.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter a song title.", "Warning", JOptionPane.WARNING_MESSAGE);
             return false;
@@ -49,60 +80,92 @@ public class MusicCollectionManagerApp {
             JOptionPane.showMessageDialog(null, "This song is already in your Liked Songs list.", "Duplicate Entry", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        likedSongs.add(songTitle);
+        likedSongs.add(songTitle);   
+        System.out.println("Liked Songs List: " + likedSongs);
+        System.out.println("Liked Songs Count: " + likedSongs.size());
         return true;
     }
     
-    public boolean copySongToGenre(String songTitle, String genre) {
-        if (genre.equalsIgnoreCase("jazz")) {
+   
+
+    
+    public boolean copySongToGenre(String songTitle, String newGenre) {
+        // First, check if the song is already in the likedSongs list
+        if (!likedSongs.contains(songTitle)) {
+            JOptionPane.showMessageDialog(null, "Song is not in the Liked Songs list.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Remove the song from any genre list it may already be in
+        if (jazzSongs.remove(songTitle) || synthSongs.remove(songTitle)) {
+            // If the song was in a genre list, update the counters
+
+        }
+
+        // Add the song to the new genre list
+        if (newGenre.equalsIgnoreCase("jazz")) {
             if (!jazzSongs.contains(songTitle)) {
                 jazzSongs.add(songTitle);
-                synthSongs.remove(songTitle); // Ensure it's not listed under another genre
+                JOptionPane.showMessageDialog(null, "Song added to Jazz", "Success", JOptionPane.INFORMATION_MESSAGE);
+
                 return true;
             }
-        } else if (genre.equalsIgnoreCase("synth")) {
+        } else if (newGenre.equalsIgnoreCase("synth")) {
             if (!synthSongs.contains(songTitle)) {
                 synthSongs.add(songTitle);
-                jazzSongs.remove(songTitle); // Ensure it's not listed under another genre
+                JOptionPane.showMessageDialog(null, "Song added to Synth", "Success", JOptionPane.INFORMATION_MESSAGE);
+
                 return true;
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Genre not recognized: " + genre, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Genre not recognized: " + newGenre, "Error", JOptionPane.ERROR_MESSAGE);
         }
         return false;
     }
     
-    // Method to remove a song from the liked songs list
     public void removeSongFromLiked(String songTitle) {
+        likedSongs.remove(songTitle); // Removing a song from likedSongs list
+        // Remove a song from the liked songs list
         if (likedSongs.remove(songTitle)) {
-            // Also attempt to remove from any genre-specific list
-            jazzSongs.remove(songTitle);
-            synthSongs.remove(songTitle);
-            JOptionPane.showMessageDialog(null, "Song removed from Liked Songs and genre lists.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Song removed from Liked Songs.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            // Update the counter for the liked songs list
+
+            // Also remove from genre lists and update those counters if necessary
+            removeSongFromGenres(songTitle);
         } else {
             JOptionPane.showMessageDialog(null, "Song not found in Liked Songs.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
     public void removeSongFromGenres(String songTitle) {
+        // Remove a song from both genre lists
         jazzSongs.remove(songTitle);
         synthSongs.remove(songTitle);
     }
     
-    public LinkedList<String> getLikedSongs() {
+    public ArrayList<String> getLikedSongs() {
         return likedSongs;
     }
-    
-    public LinkedList<String> getJazzSongs() {
+
+    public ArrayList<String> getJazzSongs() {
         return jazzSongs;
     }
-    
-    public LinkedList<String> getSynthSongs() {
+
+    public ArrayList<String> getSynthSongs() {
         return synthSongs;
     }
-    
+
+   
+    // Main method to launch the GUI
     public static void main(String[] args) {
-        MusicCollectionManagerGUI myGUI = new MusicCollectionManagerGUI(new MusicCollectionManagerApp());
-        myGUI.setVisible(true);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                MusicCollectionManagerApp app = new MusicCollectionManagerApp();
+                MusicCollectionManagerGUI myGUI = new MusicCollectionManagerGUI(app);
+                myGUI.setVisible(true);
+            }
+        });
     }
+
 }
+
